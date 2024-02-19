@@ -15,7 +15,8 @@ const update = () => {
         if (!isNaN(num))
             tot += (num*allCartValue[j++].value)
     }
-    Cart[0].innerText = `$${tot}`;
+    ;
+    Cart[0].innerText = `$${tot.toFixed(2)}`;
 }
 
 const AddCart = document.querySelectorAll<HTMLButtonElement>('.shop-item-button')
