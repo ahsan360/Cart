@@ -1,22 +1,23 @@
 
-const update = ()=>{
-   const Cart = document.querySelectorAll<HTMLDivElement>('.cart-total-price')
-   const allCart = document.querySelectorAll<HTMLDivElement>('.cart-price')
-   let tot :number = 0;
-   for(const i of allCart)
-   {
-        let price : string ='';
-        const text :string = i.innerText
-      for(let j =0;j< text.length;j++){
-            if(j)price+=text[j]
-      }
-     const num :number = parseFloat(price);
-    if(!isNaN(num))
-     tot+=(num)
-   }
-   Cart[0].innerText = `$${tot}`;
+const update = () => {
+    const Cart = document.querySelectorAll<HTMLDivElement>('.cart-total-price')
+    const allCart = document.querySelectorAll<HTMLDivElement>('.cart-price')
+    const allCartValue = Array.from(document.querySelectorAll<HTMLDivElement>('.cart-quantity-input'))
+    let tot: number = 0;
+    let j = 0;
+    for (const i of allCart) {
+        let price: string = '';
+        const text: string = i.innerText
+        for (let j = 0; j < text.length; j++) {
+            if (j) price += text[j]
+        }
+        const num: number = parseFloat(price);
+        if (!isNaN(num))
+            tot += (num*allCartValue[j++].value)
+    }
+    Cart[0].innerText = `$${tot}`;
 }
- 
+
 const AddCart = document.querySelectorAll<HTMLButtonElement>('.shop-item-button')
 for (let i of AddCart) {
     let btn = i;
@@ -32,10 +33,13 @@ for (let i of AddCart) {
 }
 
 let removeCartitem = (event: MouseEvent) => {
-    console.log(event)
+    //console.log(event)
     let cur = <HTMLButtonElement>event.target;
     let t = <HTMLDivElement>cur.parentElement?.parentElement
     if (t) t.remove()
+    update()
+}
+let change = (event: MouseEvent) => {
     update()
 }
 const addCartItem = (title: any, price: any, img: any) => {
@@ -44,13 +48,13 @@ const addCartItem = (title: any, price: any, img: any) => {
     const parent = document.querySelectorAll<HTMLDivElement>('.cart-items')[0];
     const titles = document.querySelectorAll<HTMLDivElement>('.cart-item-title')
     for (const i of titles) {
-     
-        if (i.innerText == title) { 
+
+        if (i.innerText == title) {
             alert('Already Added');
             return
         }
     }
-    
+
 
     if (parent) {
         child.innerHTML =
@@ -66,14 +70,12 @@ const addCartItem = (title: any, price: any, img: any) => {
         parent.append(child);
         const btn = child.getElementsByClassName('btn-danger')[0];
         btn.addEventListener('click', (event: any) => removeCartitem(event));
+        const cartQuantityInput = child.getElementsByClassName('cart-quantity-input')[0];
+        cartQuantityInput.addEventListener('change',(event:any)=> change(event))
 
     }
 };
 
 
-const removeCart = document.querySelectorAll<HTMLButtonElement>('.btn-danger')
-for (let i of removeCart) {
-    let btn = i;
-    btn.addEventListener('click', removeCartitem);
-}
+
 
