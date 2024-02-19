@@ -39,9 +39,7 @@ let removeCartitem = (event: MouseEvent) => {
     if (t) t.remove()
     update()
 }
-let change = (event: MouseEvent) => {
-    update()
-}
+ 
 const addCartItem = (title: any, price: any, img: any) => {
     const child = document.createElement('div');
     child.classList.add('cart-row');
@@ -70,8 +68,15 @@ const addCartItem = (title: any, price: any, img: any) => {
         parent.append(child);
         const btn = child.getElementsByClassName('btn-danger')[0];
         btn.addEventListener('click', (event: any) => removeCartitem(event));
-        const cartQuantityInput = child.getElementsByClassName('cart-quantity-input')[0];
-        cartQuantityInput.addEventListener('change',(event:any)=> change(event))
+        const cartQuantityInput: HTMLInputElement | null = child.querySelector('.cart-quantity-input');
+        if(cartQuantityInput){
+            
+        cartQuantityInput.addEventListener('change',(event:any)=> {
+            if(Number(cartQuantityInput.value)<=0)cartQuantityInput.value = '1';
+                update()
+            
+        })
+        }
 
     }
 };
